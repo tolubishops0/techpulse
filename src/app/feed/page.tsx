@@ -1,29 +1,36 @@
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArticleCard } from "@/components/ArticleCard";
-
 import PersonalisedBanner from "./PersonalizedBanner";
 import TrendingFeed from "./Trendingfeed";
 import { Navbar } from "@/components/NavBar";
 import { CategorySidebar } from "@/components/CategoryStrips";
-import { getArticles } from "@/lib/actions";
-import { Article, Category, FeedPageProps } from "@/types";
+import { Category } from "@/types";
 import {
   ArticleFeedSkeleton,
   PersonalisedBannerSkeleton,
   TrendingFeedSkeleton,
 } from "@/components/Skeletons";
+import ArticleGrid from "@/components/ArticleGrid";
+import { getUser } from "@/lib/auth";
 
-export default async function FeedPage({ searchParams }: FeedPageProps) {
-  const category = searchParams.category;
-  const articles: Article[] = (await getArticles(
-    category as Category,
-  )) as unknown as Article[];
-  console.log({ articles });
+export default async function FeedPage({
+  searchParams,
+}: {
+  searchParams: { category?: string };
+}) {
+  const user = await getUser();
+
+  const resolvedSearchParams = await searchParams;
+  const { category } = resolvedSearchParams;
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
-      <Navbar showSearch={true} showActions activeLink="feed" />
+      <Navbar
+        showSearch={true}
+        showActions
+        activeLink="feed"
+        user={user?.email}
+      />
       <div className="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
         <CategorySidebar />
 
@@ -33,11 +40,7 @@ export default async function FeedPage({ searchParams }: FeedPageProps) {
           </Suspense>
 
           <Suspense fallback={<ArticleFeedSkeleton />}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {articles?.map((article) => (
-                <ArticleCard key={article.slug} {...article} />
-              ))}
-            </div>
+            <ArticleGrid category={category as Category} />
           </Suspense>
         </main>
 

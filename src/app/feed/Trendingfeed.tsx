@@ -2,6 +2,9 @@
 // Async Server Component — runs on the server, streams in via Suspense (PPR)
 // No "use client" — this is intentional
 
+import { getTrendingArticles } from "@/lib/actions";
+import { categoryColors } from "@/lib/db";
+
 type TrendingArticle = {
   id: number;
   title: string;
@@ -9,59 +12,16 @@ type TrendingArticle = {
   views: string;
 };
 
-async function getTrendingArticles(): Promise<TrendingArticle[]> {
-  // Simulate a slow trending fetch (e.g. analytics DB query)
-  // Replace with your real data source
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  return [
-    {
-      id: 1,
-      title: "Next.js 15 Introduces Partial Prerendering",
-      category: "Web Dev",
-      views: "24k views",
-    },
-    {
-      id: 2,
-      title: "Anthropic releases Claude 3.5 Sonnet",
-      category: "AI",
-      views: "18k views",
-    },
-    {
-      id: 3,
-      title: "Zero-day vulnerability found in popular npm package",
-      category: "Security",
-      views: "15k views",
-    },
-    {
-      id: 4,
-      title: "The hidden costs of serverless",
-      category: "Cloud",
-      views: "9k views",
-    },
-  ];
+async function getTrending(): Promise<TrendingArticle[]> {
+  const trending_article = await getTrendingArticles();
+  return trending_article;
 }
 
-const categoryColors: Record<string, string> = {
-  AI: "text-purple-400 bg-purple-400/10",
-  "Web Dev": "text-blue-400 bg-blue-400/10",
-  Security: "text-red-400 bg-red-400/10",
-  Cloud: "text-sky-400 bg-sky-400/10",
-  "Open Source": "text-green-400 bg-green-400/10",
-  Tools: "text-yellow-400 bg-yellow-400/10",
-  Hardware: "text-orange-400 bg-orange-400/10",
-};
-
 export default async function TrendingFeed() {
-  const articles = await getTrendingArticles();
+  const articles = await getTrending();
 
   return (
     <div className="flex flex-col gap-3 relative">
-      {/* Optional: label so you can see it working during dev */}
-      <div className="absolute top-0 right-0 text-[10px] text-white/30 uppercase tracking-widest font-mono">
-        PPR — streamed
-      </div>
-
       {articles.map((article) => {
         const colorClass =
           categoryColors[article.category] ?? "text-white/40 bg-white/5";

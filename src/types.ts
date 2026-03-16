@@ -10,6 +10,8 @@ export type Category =
 
 export type Article = {
   author_initials: string;
+  author_name: string;
+  body: string;
   category: Category;
   comment_count: number;
   created_at: string;
@@ -22,8 +24,7 @@ export type Article = {
   slug: string;
   title: string;
 };
-export type FeedPageProps = {
-  searchParams: {
-    category?: string;
-  };
-};
+
+export interface FeedPageProps {
+  params: { slug?: string };
+}

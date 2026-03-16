@@ -19,10 +19,6 @@ export default async function PersonalisedBanner() {
 
   return (
     <div className="mb-8 p-6 rounded-2xl border border-white/10 bg-white/5 relative overflow-hidden">
-      <div className="absolute top-2 right-2 text-[10px] text-white/30 uppercase tracking-widest font-mono">
-        PPR — streamed
-      </div>
-
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-[#FF6B6B]/20 border border-[#FF6B6B]/30 flex items-center justify-center text-[#FF6B6B] font-bold text-lg shrink-0">
           {name[0]}

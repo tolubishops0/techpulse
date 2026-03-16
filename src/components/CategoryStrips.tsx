@@ -1,72 +1,50 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { categories } from "@/lib/db";
-import { useRouter } from "next/navigation";
-
-export function CategoryStrip({
-  categories,
-  getActive,
-  active,
-}: {
-  active: string;
-  categories: string[];
-  getActive: (cat: string) => void;
-}) {
-  return (
-    <div className="flex items-center gap-3 w-max mx-auto">
-      {categories.map((cat) => (
-        <button
-          key={cat}
-          onClick={() => getActive(cat)}
-          className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-            active === cat
-              ? "bg-[#FF6B6B] text-white"
-              : "bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
-          }`}
-        >
-          {cat}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 export const CategorySidebar = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
+  const active = searchParams.get("category") || "all";
 
   function handleClick(cat: string) {
-    if (cat === "All") {
-      router.push("/feed");
-    } else {
-      router.push(`/feed?category=${cat}`);
-    }
+    const url = cat.toLowerCase() === "all" ? "/feed" : `/feed?category=${cat}`;
+
+    startTransition(() => {
+      router.push(url);
+    });
   }
 
   return (
-    <aside className="hidden lg:block w-64 shrink-0">
-      <div className="sticky top-24">
-        <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wider mb-4">
-          Categories
-        </h2>
-        <nav className="flex flex-col gap-1">
-          {categories.map((cat, i) => (
+    <aside
+      className={`hidden lg:block w-64 shrink-0 ${isPending ? "opacity-70" : ""}`}
+    >
+      <nav className="flex flex-col gap-1">
+        {categories.map((cat) => {
+          const isActive = active === cat;
+
+          return (
             <button
-              onClick={() => handleClick(cat.replace(" ", ""))}
+              onClick={() => handleClick(cat)}
               key={cat}
-              className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left transition-colors ${
-                i === 0
+              className={`capitalize flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left transition-colors ${
+                isActive
                   ? "bg-white/10 text-white font-medium"
-                  : "text-white/60 hover:bg-white/5 hover:text-white"
+                  : "text-white/60 hover:bg-white/5 hover:text-white cursor-pointer"
               }`}
             >
               <span>{cat}</span>
-              {i === 0 && (
+              {isActive && (
                 <div className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B]" />
               )}
             </button>
-          ))}
-        </nav>
-      </div>
+          );
+        })}
+      </nav>
     </aside>
   );
 };

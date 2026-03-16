@@ -33,17 +33,19 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <Button
+              asChild
               size="lg"
               className="bg-[#FF6B6B] text-white hover:bg-[#FF6B6B]/90 h-12 px-8 text-base"
             >
-              Read Latest News
+              <a href="/feed"> Read Latest News</a>
             </Button>
             <Button
               size="lg"
+              asChild
               variant="outlinen"
               className="h-12 px-8 text-base border-white/20 hover:bg-white/10 hover:text-white"
             >
-              Sign In
+              <a href="/login">Sign In</a>
             </Button>
           </div>
 

@@ -3,26 +3,44 @@ import { CategoryBadge } from "@/components/CategoryBadge";
 import { LikeButton } from "@/components/LikeButton";
 import { CommentSection } from "@/components/CommentSection";
 import { UserAvatar } from "@/components/UserAvatar";
-import { Article, FeedPageProps } from "@/types";
-import { getArticleBySlug, getUserBookmark, getUserLike } from "@/lib/actions";
+import { FeedPageProps } from "@/types";
+import Image from "next/image";
+
 import { formatDate } from "@/lib/utils";
 import { getUser } from "@/lib/auth";
 import { ArticleActions } from "../../ArticleActiosn.tsx";
+import { ReadingTracker } from "@/components/ReadTracker";
+import {
+  getArticleBySlug,
+  getArticles,
+  getComments,
+  getUserBookmark,
+  getUserLike,
+} from "@/lib/queries";
+
+export async function generateStaticParams() {
+  const articles = await getArticles();
+  return articles.map((article) => ({ slug: article.slug }));
+}
 
 export default async function ArticlePage({ params }: FeedPageProps) {
   const { slug } = await params;
-  const user = await getUser();
-  const article = (await getArticleBySlug(slug as string)) as Article;
-  const userLiked = user ? await getUserLike(article.id) : false;
-  const userBookmarked = user ? await getUserBookmark(article.id) : false;
+
+  const [user, article] = await Promise.all([
+    getUser(),
+    getArticleBySlug(slug as string),
+  ]);
+
+  const [userLiked, userBookmarked, comments] = await Promise.all([
+    user ? getUserLike(article.id) : Promise.resolve(false),
+    user ? getUserBookmark(article.id) : Promise.resolve(false),
+    getComments(article.id),
+  ]);
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-[#FF6B6B]/30 pb-20">
-      <Navbar
-        showSearch={false}
-        showActions
-        activeLink="feed"
-        user={user?.email}
-      />
+      <Navbar showSearch={false} showActions activeLink="feed" user={user} />
+      <ReadingTracker articleId={article.id} userId={user?.id} />
       <main className="max-w-3xl mx-auto px-4 pt-10">
         {!article ? (
           <div className="text-center pt-20">
@@ -67,10 +85,11 @@ export default async function ArticlePage({ params }: FeedPageProps) {
               />
             </div>
 
-            <div className="aspect-[2/1] w-full rounded-xl overflow-hidden mb-10 border border-white/10">
-              <img
-                src="/__mockup/images/article-web.png"
-                alt="React 19"
+            <div className="aspect-[2/1] w-full rounded-xl overflow-hidden mb-10 border border-white/10 relative">
+              <Image
+                src={article?.image}
+                alt={article?.title}
+                fill
                 className="w-full h-full object-cover"
               />
             </div>
@@ -88,7 +107,11 @@ export default async function ArticlePage({ params }: FeedPageProps) {
               />
             </div>
 
-            <CommentSection user={user} articleId={article?.id} />
+            <CommentSection
+              user={user}
+              intialComments={comments}
+              articleid={article?.id}
+            />
           </>
         )}
       </main>

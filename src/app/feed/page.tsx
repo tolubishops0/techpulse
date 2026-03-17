@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import PersonalisedBanner from "./PersonalizedBanner";
 import TrendingFeed from "./Trendingfeed";
 import { Navbar } from "@/components/NavBar";
-import { CategorySidebar } from "@/components/CategoryStrips";
 import { Category } from "@/types";
 import {
   ArticleFeedSkeleton,
@@ -12,35 +11,32 @@ import {
   TrendingFeedSkeleton,
 } from "@/components/Skeletons";
 import ArticleGrid from "@/components/ArticleGrid";
+import { CategorySidebar, CategoryStrip } from "@/components/CategoryStrips";
 import { getUser } from "@/lib/auth";
 
 export default async function FeedPage({
   searchParams,
 }: {
-  searchParams: { category?: string };
+  searchParams: { category?: string; search?: string };
 }) {
   const user = await getUser();
 
   const resolvedSearchParams = await searchParams;
-  const { category } = resolvedSearchParams;
+  const { category, search } = resolvedSearchParams;
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
-      <Navbar
-        showSearch={true}
-        showActions
-        activeLink="feed"
-        user={user?.email}
-      />
+      <Navbar showSearch={true} showActions activeLink="feed" user={user} />
       <div className="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
         <CategorySidebar />
+        <CategoryStrip />
 
         <main className="flex-1 min-w-0">
           <Suspense fallback={<PersonalisedBannerSkeleton />}>
-            <PersonalisedBanner />
+            <PersonalisedBanner user={user} />
           </Suspense>
 
           <Suspense fallback={<ArticleFeedSkeleton />}>
-            <ArticleGrid category={category as Category} />
+            <ArticleGrid category={category as Category} search={search} />
           </Suspense>
         </main>
 

@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Heart, MessageSquare } from "lucide-react";
 import { Article } from "@/types";
 import Link from "next/link";
+import Image from "next/image";
 
 export function ArticleCard({
   image,
@@ -19,12 +20,18 @@ export function ArticleCard({
   return (
     <Link href={`feed/article/${slug}`}>
       <article className="flex flex-col gap-3 group cursor-pointer">
-        <div className="aspect-[16/9] rounded-xl overflow-hidden border border-white/10 relative bg-white/5">
-          <img
+        <div className="aspect-[16/9] rounded-xl overflow-hidden border border-white/10 relative bg-white/5 relative">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          {/* <img
             src={image}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+          /> */}
           <div className="absolute top-3 left-3">
             <Badge className={`bg-[#FF6B6B] text-white border-0`}>
               {category}

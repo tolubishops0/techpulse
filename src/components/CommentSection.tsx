@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User } from "@supabase/supabase-js";
-import { addComment, getComments } from "@/lib/actions";
+import { addComment } from "@/lib/actions";
 
 interface DBComment {
   id: string;
@@ -17,22 +17,21 @@ interface DBComment {
 
 interface CommentSectionProps {
   user?: User | null;
-  articleId: string;
+  intialComments: DBComment[];
+  articleid: string;
 }
 
-export function CommentSection({ user, articleId }: CommentSectionProps) {
+export function CommentSection({
+  user,
+  intialComments,
+  articleid,
+}: CommentSectionProps) {
   const [comments, setComments] = useState<DBComment[]>([]);
   const [value, setValue] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchComments() {
-      const data = await getComments(articleId);
-      setComments(data);
-      setLoading(false);
-    }
-    fetchComments();
-  }, [articleId]);
+    setComments(intialComments);
+  }, []);
 
   const handleSubmit = async () => {
     if (!value.trim()) return;
@@ -44,7 +43,7 @@ export function CommentSection({ user, articleId }: CommentSectionProps) {
       user.user_metadata?.full_name ??
       user.user_metadata?.user_name ??
       user.email?.split("@")[0];
-    const result = await addComment(articleId, value.trim());
+    const result = await addComment(articleid, value.trim());
     if (result?.error) return;
     setComments([
       {
@@ -118,9 +117,7 @@ export function CommentSection({ user, articleId }: CommentSectionProps) {
         )}
       </div>
 
-      {loading ? (
-        <p className="text-white/40 text-sm">Loading comments...</p>
-      ) : comments.length === 0 ? (
+      {comments.length === 0 ? (
         <p className="text-white/40 text-sm">No comments yet — be the first!</p>
       ) : (
         <div className="space-y-6">

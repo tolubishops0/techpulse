@@ -1,9 +1,5 @@
-// app/components/TrendingFeed.tsx
-// Async Server Component — runs on the server, streams in via Suspense (PPR)
-// No "use client" — this is intentional
-
-import { getTrendingArticles } from "@/lib/actions";
 import { categoryColors } from "@/lib/db";
+import { getTrendingArticles } from "../../lib/queries";
 
 type TrendingArticle = {
   id: number;

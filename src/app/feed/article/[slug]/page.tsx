@@ -3,18 +3,18 @@ import { CategoryBadge } from "@/components/CategoryBadge";
 import { LikeButton } from "@/components/LikeButton";
 import { CommentSection } from "@/components/CommentSection";
 import { UserAvatar } from "@/components/UserAvatar";
-import { Button } from "@/components/ui/button";
-import { Share2, BookmarkPlus } from "lucide-react";
 import { Article, FeedPageProps } from "@/types";
-import { getArticleBySlug, getUserLike } from "@/lib/actions";
+import { getArticleBySlug, getUserBookmark, getUserLike } from "@/lib/actions";
 import { formatDate } from "@/lib/utils";
 import { getUser } from "@/lib/auth";
+import { ArticleActions } from "../../ArticleActiosn.tsx";
 
 export default async function ArticlePage({ params }: FeedPageProps) {
   const { slug } = await params;
   const user = await getUser();
   const article = (await getArticleBySlug(slug as string)) as Article;
   const userLiked = user ? await getUserLike(article.id) : false;
+  const userBookmarked = user ? await getUserBookmark(article.id) : false;
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-[#FF6B6B]/30 pb-20">
       <Navbar
@@ -60,22 +60,11 @@ export default async function ArticlePage({ params }: FeedPageProps) {
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-white/60 hover:text-white rounded-full hover:bg-white/10"
-                >
-                  <Share2 className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-white/60 hover:text-white rounded-full hover:bg-white/10"
-                >
-                  <BookmarkPlus className="w-4 h-4" />
-                </Button>
-              </div>
+              <ArticleActions
+                articleId={article.id}
+                user={user}
+                initialBookmarked={userBookmarked}
+              />
             </div>
 
             <div className="aspect-[2/1] w-full rounded-xl overflow-hidden mb-10 border border-white/10">

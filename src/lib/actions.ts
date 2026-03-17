@@ -160,3 +160,53 @@ export const getUserLike = async (articleId: string) => {
     return false;
   }
 };
+
+export const toggleBookmark = async (articleId: string) => {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { error: "Not signed in" };
+
+    const { data: existing } = await supabase
+      .from("bookmarks")
+      .select("id")
+      .eq("article_id", articleId)
+      .eq("user_id", user.id)
+      .single();
+
+    if (existing) {
+      await supabase.from("bookmarks").delete().eq("id", existing.id);
+      return { bookmarked: false };
+    } else {
+      await supabase
+        .from("bookmarks")
+        .insert({ article_id: articleId, user_id: user.id });
+      return { bookmarked: true };
+    }
+  } catch {
+    return { error: "Something went wrong" };
+  }
+};
+
+export const getUserBookmark = async (articleId: string) => {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return false;
+
+    const { data } = await supabase
+      .from("bookmarks")
+      .select("id")
+      .eq("article_id", articleId)
+      .eq("user_id", user.id)
+      .single();
+
+    return !!data;
+  } catch {
+    return false;
+  }
+};

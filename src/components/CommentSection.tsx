@@ -8,7 +8,9 @@ import { addComment, getComments } from "@/lib/actions";
 
 interface DBComment {
   id: string;
+  user_id: string;
   user_email: string;
+  full_name: string;
   text: string;
   created_at: string;
 }
@@ -34,13 +36,21 @@ export function CommentSection({ user, articleId }: CommentSectionProps) {
 
   const handleSubmit = async () => {
     if (!value.trim()) return;
+    if (!user) {
+      window.location.href = "/login";
+      return;
+    }
+    const full_name =
+      user.user_metadata?.full_name ??
+      user.user_metadata?.user_name ??
+      user.email?.split("@")[0];
     const result = await addComment(articleId, value.trim());
     if (result?.error) return;
-
-    // optimistic update
     setComments([
       {
         id: crypto.randomUUID(),
+        user_id: user?.id,
+        full_name,
         user_email: user?.email ?? "you",
         text: value.trim(),
         created_at: new Date().toISOString(),
@@ -71,7 +81,7 @@ export function CommentSection({ user, articleId }: CommentSectionProps) {
       <div className="flex gap-4 mb-10">
         <Avatar className="w-8 h-8 shrink-0">
           <AvatarFallback className="bg-white/10 text-xs text-white uppercase">
-            {user?.email?.slice(0, 1) ?? "?"}
+            {user?.user_metadata?.full_name?.slice(0, 1) ?? "?"}
           </AvatarFallback>
         </Avatar>
 
@@ -98,6 +108,7 @@ export function CommentSection({ user, articleId }: CommentSectionProps) {
             <div className="flex justify-end mt-2">
               <Button
                 onClick={handleSubmit}
+                disabled={!value}
                 className="bg-white text-black hover:bg-white/90 text-sm h-8"
               >
                 Post Comment
@@ -113,28 +124,34 @@ export function CommentSection({ user, articleId }: CommentSectionProps) {
         <p className="text-white/40 text-sm">No comments yet — be the first!</p>
       ) : (
         <div className="space-y-6">
-          {comments.map((comment) => (
-            <div key={comment.id} className="flex gap-4">
-              <Avatar className="w-8 h-8 shrink-0">
-                <AvatarFallback className="bg-white/10 text-xs text-white uppercase">
-                  {comment.user_email.slice(0, 1)}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span className="font-medium text-sm text-white">
-                    {comment.user_email}
-                  </span>
-                  <span className="text-xs text-white/40">
-                    {formatTime(comment.created_at)}
-                  </span>
+          {comments.map((comment) => {
+            const isUser = user?.id === comment?.user_id;
+            return (
+              <div key={comment.id} className="flex gap-4">
+                <Avatar className="w-8 h-8 shrink-0">
+                  <AvatarFallback className="bg-white/10 text-xs text-white uppercase">
+                    {comment.full_name?.slice(0, 1)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="font-medium text-sm text-white">
+                      {comment.full_name}
+                    </span>
+                    <span className="text-xs text-white/40">
+                      {isUser && "(You)"}
+                    </span>
+                    <span className="text-xs text-white/40">
+                      {formatTime(comment.created_at)}
+                    </span>
+                  </div>
+                  <p className="text-sm text-white/70 leading-relaxed">
+                    {comment.text}
+                  </p>
                 </div>
-                <p className="text-sm text-white/70 leading-relaxed">
-                  {comment.text}
-                </p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </section>

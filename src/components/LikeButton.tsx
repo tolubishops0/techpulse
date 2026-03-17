@@ -27,9 +27,16 @@ export function LikeButton({
       window.location.href = "/login";
       return;
     }
+
     setLiked((prev) => !prev);
     setCount((prev) => (liked ? prev - 1 : prev + 1));
-    await toggleLike(articleId, !liked);
+
+    const result = await toggleLike(articleId);
+
+    if (result?.error) {
+      setLiked((prev) => !prev);
+      setCount((prev) => (liked ? prev + 1 : prev - 1));
+    }
   };
 
   return (

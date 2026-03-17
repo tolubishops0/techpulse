@@ -1,4 +1,3 @@
-import React from "react";
 import { Navbar } from "@/components/NavBar";
 import { CategoryBadge } from "@/components/CategoryBadge";
 import { LikeButton } from "@/components/LikeButton";
@@ -7,7 +6,7 @@ import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { Share2, BookmarkPlus } from "lucide-react";
 import { Article, FeedPageProps } from "@/types";
-import { getArticleBySlug } from "@/lib/actions";
+import { getArticleBySlug, getUserLike } from "@/lib/actions";
 import { formatDate } from "@/lib/utils";
 import { getUser } from "@/lib/auth";
 
@@ -15,7 +14,7 @@ export default async function ArticlePage({ params }: FeedPageProps) {
   const { slug } = await params;
   const user = await getUser();
   const article = (await getArticleBySlug(slug as string)) as Article;
-
+  const userLiked = user ? await getUserLike(article.id) : false;
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-[#FF6B6B]/30 pb-20">
       <Navbar
@@ -94,8 +93,9 @@ export default async function ArticlePage({ params }: FeedPageProps) {
             <div className="flex items-center justify-center gap-4 py-12 my-12 border-y border-white/10">
               <LikeButton
                 initialCount={article.like_count}
+                initialLiked={userLiked}
+                articleId={article.id}
                 user={user}
-                articleId={article?.id}
               />
             </div>
 

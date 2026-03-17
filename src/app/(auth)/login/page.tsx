@@ -10,6 +10,7 @@ export default function AuthPage() {
   const { replace } = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ export default function AuthPage() {
     setError(null);
 
     const result = isSignUp
-      ? await signUp(email, password)
+      ? await signUp(email, password, name)
       : await signIn(email, password);
     if (result?.error) {
       setError(result.error);
@@ -44,10 +45,8 @@ export default function AuthPage() {
         </a>
       </header>
 
-      {/* Form */}
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-sm">
-          {/* Title */}
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold tracking-tight mb-2">
               {isSignUp ? "Create an account" : "Welcome back"}
@@ -59,8 +58,19 @@ export default function AuthPage() {
             </p>
           </div>
 
-          {/* Fields */}
           <div className="flex flex-col gap-3 mb-4">
+            {isSignUp && (
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm text-white/70">Display name</label>
+                <Input
+                  placeholder="How should we call you?"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="bg-white/5 border-white/10 h-12 text-white placeholder:text-white/30 focus-visible:ring-1
+                  focus-visible:ring-[#FF6B6B]"
+                />
+              </div>
+            )}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm text-white/70">Email</label>
               <Input
@@ -68,7 +78,8 @@ export default function AuthPage() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-[#FF6B6B] h-12"
+                className="bg-white/5 border-white/10 h-12 text-white placeholder:text-white/30 focus-visible:ring-1
+                  focus-visible:ring-[#FF6B6B]"
               />
             </div>
 
@@ -80,7 +91,8 @@ export default function AuthPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-[#FF6B6B] h-12"
+                className="bg-white/5 border-white/10 h-12 text-white placeholder:text-white/30 focus-visible:ring-1
+                  focus-visible:ring-[#FF6B6B]"
               />
             </div>
           </div>

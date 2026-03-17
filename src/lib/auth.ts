@@ -3,9 +3,17 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-export async function signUp(email: string, password: string) {
+export async function signUp(email: string, password: string, name: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: name,
+      },
+    },
+  });
   if (error) return { error: error.message };
   console.log({ data });
   redirect("/feed");

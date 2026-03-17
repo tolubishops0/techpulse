@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { BookmarksSection } from "../bookmarks.tsx/page";
+import BookmarksSection from "../bookmarks.tsx/page";
 import { formatDate } from "@/lib/utils";
 import { Navbar } from "@/components/NavBar";
 import { getUser } from "@/lib/auth";

@@ -6,7 +6,11 @@ import { CategoryBadge } from "@/components/CategoryBadge";
 import { Trash2 } from "lucide-react";
 import { removeBookmark } from "@/lib/actions";
 
-export function BookmarksSection({ bookmarks: initial }: { bookmarks: any[] }) {
+export default function BookmarksSection({
+  bookmarks: initial,
+}: {
+  bookmarks: any[];
+}) {
   const [bookmarks, setBookmarks] = useState(initial);
 
   const handleRemove = async (articleId: string) => {

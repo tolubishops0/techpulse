@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn, signInWithOAuth, signUp } from "@/lib/auth";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
-  const { replace } = useRouter();
+  const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -27,9 +28,17 @@ export default function AuthPage() {
     const result = isSignUp
       ? await signUp(email, password, name)
       : await signIn(email, password);
+
+    toast.success(
+      isSignUp
+        ? "Account created! Welcome to TechPulse 🎉"
+        : "Welcome back! 👋",
+    );
+    router.push("/feed");
     if (result?.error) {
-      setError(result.error);
+      toast.error(result.error);
       setLoading(false);
+      return;
     }
   }
 

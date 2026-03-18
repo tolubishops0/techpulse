@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export async function signUp(email: string, password: string, name: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -15,15 +15,14 @@ export async function signUp(email: string, password: string, name: string) {
     },
   });
   if (error) return { error: error.message };
-  console.log({ data });
-  redirect("/feed");
+  return { success: true };
 }
 
 export async function signIn(email: string, password: string) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: error.message };
-  redirect("/feed");
+  return { success: true };
 }
 
 export async function signOut() {

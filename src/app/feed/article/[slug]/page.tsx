@@ -35,7 +35,6 @@ export default async function ArticlePage({ params }: FeedPageProps) {
     getArticleBySlug(slug as string),
   ]);
 
-  // handle null article early — keeps article guaranteed non-null below
   if (!article) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">

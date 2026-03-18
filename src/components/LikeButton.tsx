@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { toggleLike } from "@/lib/actions";
+import { toast } from "sonner";
 
 interface LikeButtonProps {
   initialCount?: number;
@@ -32,10 +33,12 @@ export function LikeButton({
     setCount((prev) => (liked ? prev - 1 : prev + 1));
 
     const result = await toggleLike(articleId);
+    toast.success("Liked!");
 
     if (result?.error) {
       setLiked((prev) => !prev);
       setCount((prev) => (liked ? prev + 1 : prev - 1));
+      toast.error("Something went wrong!");
     }
   };
 

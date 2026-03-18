@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User } from "@supabase/supabase-js";
 import { addComment } from "@/lib/actions";
+import { toast } from "sonner";
 
 interface DBComment {
   id: string;
@@ -39,24 +40,33 @@ export function CommentSection({
       window.location.href = "/login";
       return;
     }
+
     const full_name =
       user.user_metadata?.full_name ??
       user.user_metadata?.user_name ??
       user.email?.split("@")[0];
-    const result = await addComment(articleid, value.trim());
-    if (result?.error) return;
-    setComments([
-      {
-        id: crypto.randomUUID(),
-        user_id: user?.id,
-        full_name,
-        user_email: user?.email ?? "you",
-        text: value.trim(),
-        created_at: new Date().toISOString(),
-      },
-      ...comments,
-    ]);
+
+    const newComment = {
+      id: crypto.randomUUID(),
+      user_id: user.id,
+      full_name,
+      user_email: user.email ?? "you",
+      text: value.trim(),
+      created_at: new Date().toISOString(),
+    };
+    setComments((prev) => [newComment, ...prev]);
     setValue("");
+
+    const result = await addComment(articleid, value.trim());
+
+    if (result?.error) {
+      setComments((prev) => prev.filter((c) => c.id !== newComment.id));
+      setValue(newComment.text); // restore the text
+      toast.error("Failed to post comment");
+      return;
+    }
+
+    toast.success("Comment posted!");
   };
 
   function formatTime(dateString: string) {

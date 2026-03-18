@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Share2, BookmarkPlus, BookmarkCheck, Check } from "lucide-react";
 import { toggleBookmark } from "@/lib/actions";
 import { User } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
 interface ArticleActionsProps {
   articleId: string;
@@ -33,8 +34,16 @@ export function ArticleActions({
     }
 
     setBookmarked((prev) => !prev);
+
     const result = await toggleBookmark(articleId);
-    if (result?.error) setBookmarked((prev) => !prev);
+
+    if (result?.error) {
+      setBookmarked((prev) => !prev); // revert
+      toast.error("Something went wrong");
+      return;
+    }
+
+    toast.success(bookmarked ? "Bookmark removed" : "Bookmarked!");
   };
 
   return (

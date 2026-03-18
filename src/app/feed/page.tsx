@@ -13,6 +13,7 @@ import ArticleGrid from "@/components/ArticleGrid";
 import { CategorySidebar, CategoryStrip } from "@/components/CategoryStrips";
 import { getUser } from "@/lib/auth";
 import { NavbarWrapper } from "@/components/NavWrapper";
+import Newsletter from "./Newsletter";
 
 export default async function FeedPage({
   searchParams,
@@ -55,24 +56,7 @@ export default async function FeedPage({
               <TrendingFeed />
             </Suspense>
 
-            <div className="mt-8 p-4 rounded-xl bg-gradient-to-br from-[#FF6B6B]/20 to-transparent border border-[#FF6B6B]/20">
-              <h3 className="font-bold mb-2">Subscribe to TechPulse</h3>
-              <p className="text-xs text-white/60 mb-4">
-                Get the latest developer news straight to your inbox.
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Email address"
-                  className="h-8 text-xs bg-black/50 border-white/10"
-                />
-                <Button
-                  size="sm"
-                  className="h-8 bg-[#FF6B6B] hover:bg-[#FF6B6B]/90 text-white text-xs"
-                >
-                  Join
-                </Button>
-              </div>
-            </div>
+            <Newsletter />
           </div>
         </aside>
       </div>

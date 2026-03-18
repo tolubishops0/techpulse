@@ -136,3 +136,22 @@ export const trackReading = async (articleId: string, progress: number) => {
     );
   } catch {}
 };
+
+export const collectEmail = async (email: string) => {
+  try {
+    const supabase = await createClient();
+    const { data: existing } = await supabase
+      .from("newsletter")
+      .select("id")
+      .eq("email", email)
+      .single();
+    if (existing) return { error: "Already subscribed!" };
+
+    const { error } = await supabase.from("newsletter").insert({ email });
+
+    if (error) return { error: error.message };
+    return { success: true };
+  } catch {
+    return { error: "Something went wrong" };
+  }
+};

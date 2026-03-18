@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import PersonalisedBanner from "./PersonalizedBanner";
 import TrendingFeed from "./Trendingfeed";
 import { Category } from "@/types";
@@ -55,7 +53,6 @@ export default async function FeedPage({
             <Suspense fallback={<TrendingFeedSkeleton />}>
               <TrendingFeed />
             </Suspense>
-
             <Newsletter />
           </div>
         </aside>

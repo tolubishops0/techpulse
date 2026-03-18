@@ -34,7 +34,7 @@ export default function RootLayout({
           position="bottom-right"
           theme="dark"
           richColors
-          duration={200}
+          duration={2000}
         />
       </body>
     </html>

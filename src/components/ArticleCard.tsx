@@ -4,6 +4,7 @@ import { Heart, MessageSquare } from "lucide-react";
 import { Article } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
+import { formatDate } from "@/lib/utils";
 
 export function ArticleCard({
   image,
@@ -53,7 +54,7 @@ export function ArticleCard({
                   {author_initials}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-xs text-white/50">{date}</span>
+              <span className="text-xs text-white/50">{formatDate(date)}</span>
               <span className="text-xs text-white/30">·</span>
               <span className="text-xs text-white/50">{read_time}</span>
             </div>

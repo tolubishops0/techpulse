@@ -13,10 +13,8 @@ function Newsletter() {
       toast.error("Please enter your email");
       return;
     }
-
     try {
       const res = await collectEmail(email);
-
       if (res?.error) {
         toast.error(res.error);
         return;

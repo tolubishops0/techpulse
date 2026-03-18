@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { trackReading } from "@/lib/actions";
 
 interface Props {
@@ -9,16 +9,28 @@ interface Props {
 }
 
 export function ReadingTracker({ articleId, userId }: Props) {
+  const lastProgress = useRef(0);
+
   useEffect(() => {
     if (!userId) return;
 
-    window.addEventListener("scroll", () => {
+    trackReading(articleId, 0);
+
+    const handleScroll = () => {
       const progress = Math.round(
-        (window.scrollY / document.body.scrollHeight) * 100,
+        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) *
+          100,
       );
-      trackReading(articleId, progress);
-    });
-    trackReading(articleId, 100);
+
+      if (progress - lastProgress.current >= 10) {
+        lastProgress.current = progress;
+        trackReading(articleId, Math.min(progress, 100));
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [articleId, userId]);
 
   return null;

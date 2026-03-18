@@ -95,6 +95,7 @@ export default async function ArticlePage({ params }: FeedPageProps) {
           <ArticleActions
             articleId={article.id}
             user={user}
+            article={article}
             initialBookmarked={userBookmarked}
           />
         </div>

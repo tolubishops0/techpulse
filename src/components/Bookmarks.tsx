@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import { CategoryBadge } from "./CategoryBadge";
 import { Button } from "./ui/button";
 import { removeBookmark } from "@/lib/actions";
-import { BookmarkItem } from "@/types";
+import { BookmarkInsert } from "@/types";
+import Image from "next/image";
 
-function Bookmarks({ bookmarks: initial }: { bookmarks: BookmarkItem[] }) {
-  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>(initial ?? []);
+function Bookmarks({ bookmarks: initial }: { bookmarks: BookmarkInsert[] }) {
+  const [bookmarks, setBookmarks] = useState<BookmarkInsert[]>(initial ?? []);
 
   const handleRemove = async (articleId: string) => {
     const prev = bookmarks;
@@ -32,27 +33,30 @@ function Bookmarks({ bookmarks: initial }: { bookmarks: BookmarkItem[] }) {
     );
   }
 
+  console.log({ bookmarks });
+
   return (
     <div className="flex flex-col gap-4">
       {bookmarks.map((item) => (
         <div
-          key={item.id}
+          key={item.article_id}
           className="group flex gap-4 p-3 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
         >
-          <div className="w-24 h-20 rounded-lg overflow-hidden shrink-0 bg-white/10">
-            <img
-              src={item.articles?.image ?? "/images/article-ai.png"}
-              alt={item.articles?.title}
-              className="w-full h-full object-cover"
+          <div className="w-24 h-20 rounded-lg overflow-hidden shrink-0 bg-white/10 relative">
+            <Image
+              src={item.image ?? "/images/article-ai.png"}
+              alt={item.title ?? "article"}
+              fill
+              className="object-cover"
             />
           </div>
           <div className="flex flex-col justify-center flex-1 py-1">
             <div className="mb-2">
-              <CategoryBadge category={item.articles?.category} size="sm" />
+              <CategoryBadge category={item?.category} size="sm" />
             </div>
-            <a href={`/feed/article/${item.articles?.slug}`}>
+            <a href={`/feed/article/${item.slug}`}>
               <h3 className="font-bold text-sm leading-tight group-hover:text-[#FF6B6B] transition-colors">
-                {item.articles?.title}
+                {item.title}
               </h3>
             </a>
           </div>

@@ -1,13 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
-import { BookmarkItem, Category } from "@/types";
+import { BookmarkInsert, BookmarkItem, Category } from "@/types";
 
 export const getArticles = async (category?: Category, search?: string) => {
   try {
     const supabase = await createClient();
     let query = supabase.from("articles").select("*");
-    if (category) query = query.eq("category", category);
 
-    if (search) query = query.ilike("title", `%${search}%`);
+    if (category) query = query.ilike("category", category);
+
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,excerpt.ilike.%${search}%`);
+    }
+
     const { data, error } = await query;
     if (error) {
       console.log({ error });
@@ -102,7 +106,7 @@ export const getUserBookmark = async (articleId: string) => {
 export const getDashboardData = async (
   userId: string,
 ): Promise<{
-  bookmarks: BookmarkItem[];
+  bookmarks: BookmarkInsert[];
   commentCount: number;
   history: any[];
 }> => {
@@ -112,18 +116,7 @@ export const getDashboardData = async (
     const [bookmarksRes, commentsRes, historyRes] = await Promise.all([
       supabase
         .from("bookmarks")
-        .select(
-          `
-    id,
-    article_id,
-    articles!inner (
-      slug,
-      title,
-      category,
-      image
-    )
-  `,
-        )
+        .select("*")
         .eq("user_id", userId)
         .order("created_at", { ascending: false })
         .limit(5),
@@ -134,24 +127,21 @@ export const getDashboardData = async (
         .from("reading_history")
         .select(
           `
-          id,
-          progress,
-          updated_at,
-          articles (
-            slug,
-            title
-          )
-        `,
+      id,
+      progress,
+      updated_at,
+      articles (
+        slug,
+        title
+      )
+    `,
         )
         .eq("user_id", userId)
         .order("updated_at", { ascending: false }),
     ]);
 
     return {
-      bookmarks: (bookmarksRes.data ?? []).map((b) => ({
-        ...b,
-        articles: b.articles?.[0] ?? null,
-      })),
+      bookmarks: (bookmarksRes.data ?? []) as unknown as BookmarkInsert[],
       commentCount: commentsRes.data?.length ?? 0,
       history: historyRes.data ?? [],
     };

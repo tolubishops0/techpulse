@@ -8,7 +8,9 @@ type Props = {
 };
 
 export default async function ArticleGrid({ category, search }: Props) {
+  console.log({ category, search });
   const articles = await getArticles(category, search);
+
   if (articles.length === 0) {
     return (
       <p className="col-span-full text-center py-20 text-white/50 bg-red-600/10 rounded-xl border border-red-600/20">

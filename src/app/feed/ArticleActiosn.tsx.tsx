@@ -6,9 +6,11 @@ import { Share2, BookmarkPlus, BookmarkCheck, Check } from "lucide-react";
 import { toggleBookmark } from "@/lib/actions";
 import { User } from "@supabase/supabase-js";
 import { toast } from "sonner";
+import { BookmarkInsert } from "@/types";
 
 interface ArticleActionsProps {
   articleId: string;
+  article: BookmarkInsert;
   user?: User | null;
   initialBookmarked?: boolean;
 }
@@ -16,6 +18,7 @@ interface ArticleActionsProps {
 export function ArticleActions({
   articleId,
   user,
+  article,
   initialBookmarked = false,
 }: ArticleActionsProps) {
   const [bookmarked, setBookmarked] = useState(initialBookmarked);
@@ -26,23 +29,18 @@ export function ArticleActions({
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
   const handleBookmark = async () => {
     if (!user) {
       window.location.href = "/login";
       return;
     }
-
     setBookmarked((prev) => !prev);
-
-    const result = await toggleBookmark(articleId);
-
+    const result = await toggleBookmark(articleId, article);
     if (result?.error) {
-      setBookmarked((prev) => !prev); // revert
+      setBookmarked((prev) => !prev);
       toast.error("Something went wrong");
       return;
     }
-
     toast.success(bookmarked ? "Bookmark removed" : "Bookmarked!");
   };
 

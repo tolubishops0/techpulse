@@ -39,3 +39,17 @@ export type BookmarkItem = {
     image: string;
   };
 };
+
+export type BookmarkInsert = {
+  article_id: string;
+  user_id: string;
+  slug: string | null;
+  title: string | null;
+  excerpt: string | null;
+  category: string;
+  image: string | null;
+  author_name: string | null;
+  date: string | null;
+  read_time: string | null;
+  like_count: number | null;
+};

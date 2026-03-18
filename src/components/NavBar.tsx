@@ -8,6 +8,8 @@ import { signOut } from "@/lib/auth";
 import { User } from "@supabase/supabase-js";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader } from "lucide-react";
+import { NotificationBell } from "./NotificationBell";
+import ClickAwayListener from "react-click-away-listener";
 
 interface NavbarProps {
   showSearch?: boolean;
@@ -27,7 +29,6 @@ export function Navbar({
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [search, setSearch] = useState(searchParams.get("search") || "");
-
   function handleSearch(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key !== "Enter") return;
     const value = e.currentTarget.value.trim();
@@ -100,10 +101,8 @@ export function Navbar({
 
         {showActions && (
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-white/70 hover:text-white transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#FF6B6B]"></span>
-            </button>
+            <NotificationBell />
+
             <div className="relative group">
               <Avatar
                 onClick={() => setOpen(!open)}
@@ -113,22 +112,23 @@ export function Navbar({
                   {user ? user?.user_metadata?.full_name?.slice(0, 1) : "G"}
                 </AvatarFallback>
               </Avatar>
-
               {user && open && (
-                <div className="absolute right-0 top-10 w-48 bg-[#111] border border-white/10 rounded-xl p-1 z-50">
-                  <a
-                    href="/dashboard"
-                    className="block px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg"
-                  >
-                    Dashboard
-                  </a>
-                  <button
-                    onClick={() => signOut()}
-                    className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-white/5 rounded-lg"
-                  >
-                    Sign out
-                  </button>
-                </div>
+                <ClickAwayListener onClickAway={() => setOpen(false)}>
+                  <div className="absolute right-0 top-10 w-48 bg-[#111] border border-white/10 rounded-xl p-1 z-50 cursor-pointer">
+                    <a
+                      href="/dashboard"
+                      className="block px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg"
+                    >
+                      Dashboard
+                    </a>
+                    <button
+                      onClick={() => signOut()}
+                      className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-white/5 rounded-lg"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                </ClickAwayListener>
               )}
             </div>
           </div>
@@ -154,3 +154,5 @@ export function Navbar({
     </header>
   );
 }
+
+// https://github.com/tolubishops0/techpulse

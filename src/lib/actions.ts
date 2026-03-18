@@ -1,5 +1,6 @@
 "use server";
 
+import { BookmarkInsert } from "@/types";
 import { createClient } from "./supabase/server";
 
 export const addComment = async (articleId: string, text: string) => {
@@ -67,7 +68,10 @@ export const toggleLike = async (articleId: string) => {
   }
 };
 
-export const toggleBookmark = async (articleId: string) => {
+export const toggleBookmark = async (
+  articleId: string,
+  article?: BookmarkInsert,
+) => {
   try {
     const supabase = await createClient();
     const {
@@ -86,9 +90,19 @@ export const toggleBookmark = async (articleId: string) => {
       await supabase.from("bookmarks").delete().eq("id", existing.id);
       return { bookmarked: false };
     } else {
-      await supabase
-        .from("bookmarks")
-        .insert({ article_id: articleId, user_id: user.id });
+      await supabase.from("bookmarks").insert({
+        article_id: articleId,
+        user_id: user.id,
+        slug: article?.slug,
+        title: article?.title,
+        excerpt: article?.excerpt,
+        category: article?.category,
+        image: article?.image,
+        author_name: article?.author_name,
+        date: article?.date,
+        read_time: article?.read_time,
+        like_count: article?.like_count,
+      });
       return { bookmarked: true };
     }
   } catch {

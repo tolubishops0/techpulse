@@ -18,7 +18,13 @@ function Footer() {
           <a href="#" className="hover:text-white transition-colors">
             FAQ
           </a>
-          <a href="#" className="hover:text-white transition-colors">
+          <a
+            href="https://github.com/tolubishops0/techpulse
+"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors"
+          >
             GitHub
           </a>
         </div>

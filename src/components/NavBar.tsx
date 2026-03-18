@@ -138,21 +138,19 @@ export function Navbar({
           <div className="flex items-center gap-4">
             {!user && (
               <Button
-                variant="ghost"
-                asChild
-                className="hidden md:inline-flex text-white hover:text-white hover:bg-white/10"
+                // variant="ghost"
+                // asChild
+                className="hidden md:inline-flex text-white hover:text-white bg-[#FF6B6B] hover:bg-white/10"
               >
                 <a href="/login">Sign In</a>
               </Button>
             )}
-            <Button className="bg-[#FF6B6B] text-white hover:bg-[#FF6B6B]/90 border-0">
-              Subscribe
-            </Button>
+            {/* <Button className="bg-[#FF6B6B] text-white hover:bg-[#FF6B6B]/90 border-0">
+              <a href="#newsletter">Subscribe</a>
+            </Button> */}
           </div>
         )}
       </div>
     </header>
   );
 }
-
-// https://github.com/tolubishops0/techpulse

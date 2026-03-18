@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { features, stats, steps, testimonials } from "@/lib/db";
 import { NavbarWrapper } from "@/components/NavWrapper";
+import { LandingCTA } from "@/components/LandingCTAs";
 
 export default function LandingPage() {
   return (
@@ -26,23 +27,7 @@ export default function LandingPage() {
             Breaking stories, deep analysis, and developer tools — delivered
             daily.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <Button
-              asChild
-              size="lg"
-              className="bg-[#FF6B6B] text-white hover:bg-[#FF6B6B]/90 h-12 px-8 text-base"
-            >
-              <a href="/feed"> Read Latest News</a>
-            </Button>
-            <Button
-              size="lg"
-              asChild
-              variant="outlinen"
-              className="h-12 px-8 text-base border-white/20 hover:bg-white/10 hover:text-white"
-            >
-              <a href="/login">Sign In</a>
-            </Button>
-          </div>
+          <LandingCTA />
 
           <div className="w-full mt-24 aspect-[21/9] rounded-2xl overflow-hidden relative border border-white/10 shadow-2xl shadow-[#FF6B6B]/5">
             <img
@@ -167,7 +152,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ── CTA Banner ── */}
         <section>
           <div className="rounded-2xl border border-[#FF6B6B]/20 bg-gradient-to-br from-[#FF6B6B]/10 to-transparent p-12 text-center">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
@@ -180,7 +164,7 @@ export default function LandingPage() {
               size="lg"
               className="bg-[#FF6B6B] text-white hover:bg-[#FF6B6B]/90 h-12 px-10 text-base"
             >
-              Start Reading — It's Free
+              <a href="/feed"> Start Reading!!. It's Free</a>
             </Button>
           </div>
         </section>

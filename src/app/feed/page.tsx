@@ -53,6 +53,7 @@ export default async function FeedPage({
             <Suspense fallback={<TrendingFeedSkeleton />}>
               <TrendingFeed />
             </Suspense>
+
             <Newsletter />
           </div>
         </aside>

@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PersonalisedBanner from "./PersonalizedBanner";
 import TrendingFeed from "./Trendingfeed";
-import { Navbar } from "@/components/NavBar";
 import { Category } from "@/types";
 import {
   ArticleFeedSkeleton,
@@ -13,6 +12,7 @@ import {
 import ArticleGrid from "@/components/ArticleGrid";
 import { CategorySidebar, CategoryStrip } from "@/components/CategoryStrips";
 import { getUser } from "@/lib/auth";
+import { NavbarWrapper } from "@/components/NavWrapper";
 
 export default async function FeedPage({
   searchParams,
@@ -25,7 +25,12 @@ export default async function FeedPage({
   const { category, search } = resolvedSearchParams;
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
-      <Navbar showSearch={true} showActions activeLink="feed" user={user} />
+      <NavbarWrapper
+        showSearch={true}
+        showActions
+        activeLink="feed"
+        user={user}
+      />
       <div className="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
         <CategorySidebar />
         <CategoryStrip />

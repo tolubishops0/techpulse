@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { Category } from "@/types";
+import { BookmarkItem, Category } from "@/types";
 
 export const getArticles = async (category?: Category, search?: string) => {
   try {
@@ -99,7 +99,13 @@ export const getUserBookmark = async (articleId: string) => {
   }
 };
 
-export const getDashboardData = async (userId: string) => {
+export const getDashboardData = async (
+  userId: string,
+): Promise<{
+  bookmarks: BookmarkItem[];
+  commentCount: number;
+  history: any[];
+}> => {
   try {
     const supabase = await createClient();
 
@@ -108,15 +114,15 @@ export const getDashboardData = async (userId: string) => {
         .from("bookmarks")
         .select(
           `
-          id,
-          article_id,
-          articles (
-            slug,
-            title,
-            category,
-            image
-          )
-        `,
+    id,
+    article_id,
+    articles!inner (
+      slug,
+      title,
+      category,
+      image
+    )
+  `,
         )
         .eq("user_id", userId)
         .order("created_at", { ascending: false })
@@ -142,7 +148,10 @@ export const getDashboardData = async (userId: string) => {
     ]);
 
     return {
-      bookmarks: bookmarksRes.data ?? [],
+      bookmarks: (bookmarksRes.data ?? []).map((b) => ({
+        ...b,
+        articles: b.articles?.[0] ?? null,
+      })),
       commentCount: commentsRes.data?.length ?? 0,
       history: historyRes.data ?? [],
     };

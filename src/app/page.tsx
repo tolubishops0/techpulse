@@ -1,19 +1,14 @@
-// app/page.tsx
-// 100% SSG — no "use client", no hooks, no data fetching
-// Pure static HTML generated at build time
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Navbar } from "@/components/NavBar";
 import { features, stats, steps, testimonials } from "@/lib/db";
+import { NavbarWrapper } from "@/components/NavWrapper";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-[#FF6B6B]/30">
-      <Navbar showSearch={false} showActions={false} activeLink="home" />
+      <NavbarWrapper showSearch={false} showActions={false} activeLink="home" />
 
       <main className="container mx-auto px-4 pb-24">
-        {/* ── Hero ── */}
         <section className="py-24 md:py-32 flex flex-col items-center text-center max-w-4xl mx-auto">
           <Badge
             variant="outline"

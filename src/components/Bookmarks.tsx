@@ -1,24 +1,27 @@
 "use client";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { CategoryBadge } from "@/components/CategoryBadge";
 import { Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { CategoryBadge } from "./CategoryBadge";
+import { Button } from "./ui/button";
 import { removeBookmark } from "@/lib/actions";
+import { BookmarkItem } from "@/types";
 
-export default function BookmarksSection({
-  bookmarks: initial,
-}: {
-  bookmarks: any[];
-}) {
-  const [bookmarks, setBookmarks] = useState(initial);
+function Bookmarks({ bookmarks: initial }: { bookmarks: BookmarkItem[] }) {
+  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>(initial ?? []);
 
   const handleRemove = async (articleId: string) => {
-    setBookmarks((prev) => prev.filter((b) => b.article_id !== articleId));
-    await removeBookmark(articleId);
+    const prev = bookmarks;
+
+    setBookmarks((curr) => curr.filter((b) => b.article_id !== articleId));
+
+    try {
+      await removeBookmark(articleId);
+    } catch (err) {
+      setBookmarks(prev);
+    }
   };
 
-  if (bookmarks.length === 0) {
+  if (!bookmarks || bookmarks.length === 0) {
     return (
       <p className="text-white/40 text-sm">
         No bookmarks yet —{" "}
@@ -47,7 +50,7 @@ export default function BookmarksSection({
             <div className="mb-2">
               <CategoryBadge category={item.articles?.category} size="sm" />
             </div>
-            <a href={`feed/article/${item.articles?.slug}`}>
+            <a href={`/feed/article/${item.articles?.slug}`}>
               <h3 className="font-bold text-sm leading-tight group-hover:text-[#FF6B6B] transition-colors">
                 {item.articles?.title}
               </h3>
@@ -68,3 +71,5 @@ export default function BookmarksSection({
     </div>
   );
 }
+
+export default Bookmarks;

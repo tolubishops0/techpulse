@@ -25,8 +25,11 @@ export default async function PersonalisedBanner({
             <span className="text-[#FF6B6B] font-medium">
               new unread articles
             </span>{" "}
-            · Check out your dashboard to track your progress so far
-            {/* <span className="text-white/70">{recommendedTopic}</span> */}
+            <br />
+            <span className="text-white/70">
+              {" "}
+              Check out your dashboard to track your progress so far
+            </span>
           </p>
         </div>
 

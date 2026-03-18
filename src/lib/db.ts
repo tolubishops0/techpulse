@@ -396,3 +396,59 @@ export const categoryColors: Record<string, string> = {
   Hardware: "text-orange-400 bg-orange-400/10",
   "Web Dev": "text-orange-400 bg-orange-400/10",
 };
+
+export const faqs = [
+  {
+    q: "Is TechPulse free to read?",
+    a: "Yes, our core news feed and standard articles are completely free. We believe critical technology news should be accessible to all developers. We do offer a Pro subscription for deep-dive architectural analysis and premium courses.",
+  },
+  {
+    q: "Do you have a light mode?",
+    a: "TechPulse is designed as a dark-mode first experience, optimized for developer environments and reduced eye strain. A light mode is currently in beta and available to Pro subscribers in their account settings.",
+  },
+  {
+    q: "How do bookmarks work?",
+    a: "Once you create a free account, you can bookmark any article by clicking the ribbon icon. Bookmarks are synced across all your devices and can be organized into custom folders in your Dashboard.",
+  },
+  {
+    q: "Can I access TechPulse via RSS?",
+    a: "Absolutely. We provide comprehensive RSS feeds. You can subscribe to the global firehose at /rss/all, or subscribe to specific categories like /rss/ai or /rss/web-dev.",
+  },
+  {
+    q: "How are the Trending articles selected?",
+    a: "Our trending algorithm is based on a mix of recent engagement (likes, comments, read time) and recency. We heavily weight deep reading over superficial clicks to ensure high-quality content surfaces to the top.",
+  },
+  {
+    q: "Can I leave comments on articles?",
+    a: "Yes — comments are available to all registered users. We have a community moderation system and a code of conduct to keep discussions technical, respectful, and on-topic.",
+  },
+  {
+    q: "Do you offer API access?",
+    a: "Yes, Pro subscribers get access to our read-only GraphQL API. It allows you to programmatically fetch articles, search our archives, and integrate TechPulse content into your internal team dashboards.",
+  },
+  {
+    q: "How do I cancel my Pro subscription?",
+    a: "You can cancel anytime from your account settings under Billing. Your Pro access remains active until the end of the current billing period. No questions asked.",
+  },
+];
+
+export const team = [
+  {
+    name: "Sarah Chen",
+    role: "Editor in Chief",
+    roleColor: "text-[#FF6B6B]",
+    bio: "Former staff engineer at Vercel. Sarah leads our editorial direction and ensures technical accuracy across all our publications.",
+  },
+  {
+    name: "Marcus Webb",
+    role: "Lead Developer",
+    roleColor: "text-blue-400",
+    bio: "Creator of the TechPulse platform. Marcus focuses on performance, architecture, and delivering a world-class reading experience.",
+  },
+  {
+    name: "Priya Nair",
+    role: "Design Director",
+    roleColor: "text-emerald-400",
+    bio: "The creative force behind our brand. Priya crafts our editorial aesthetic, data visualizations, and interface systems.",
+  },
+];

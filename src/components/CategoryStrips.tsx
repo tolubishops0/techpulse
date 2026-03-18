@@ -66,13 +66,13 @@ export const CategoryStrip = () => {
               onClick={() => handleClick(cat)}
               className={`capitalize px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 isActive
-                  ? "bg-white/10 text-white"
+                  ? "bg-[#FF6B6B] text-white"
                   : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
               }`}
             >
               {cat}
               {isActive && (
-                <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-[#FF6B6B] align-middle" />
+                <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-white align-middle" />
               )}
             </button>
           );

@@ -28,3 +28,14 @@ export type Article = {
 export interface FeedPageProps {
   params: { slug?: string };
 }
+
+export type BookmarkItem = {
+  id: string;
+  article_id: string;
+  articles: {
+    slug: string;
+    title: string;
+    category: string;
+    image: string;
+  };
+};

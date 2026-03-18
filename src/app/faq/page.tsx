@@ -1,51 +1,16 @@
-import React from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Navbar } from "@/components/NavBar";
-
-const faqs = [
-  {
-    q: "Is TechPulse free to read?",
-    a: "Yes, our core news feed and standard articles are completely free. We believe critical technology news should be accessible to all developers. We do offer a Pro subscription for deep-dive architectural analysis and premium courses.",
-  },
-  {
-    q: "Do you have a light mode?",
-    a: "TechPulse is designed as a dark-mode first experience, optimized for developer environments and reduced eye strain. A light mode is currently in beta and available to Pro subscribers in their account settings.",
-  },
-  {
-    q: "How do bookmarks work?",
-    a: "Once you create a free account, you can bookmark any article by clicking the ribbon icon. Bookmarks are synced across all your devices and can be organized into custom folders in your Dashboard.",
-  },
-  {
-    q: "Can I access TechPulse via RSS?",
-    a: "Absolutely. We provide comprehensive RSS feeds. You can subscribe to the global firehose at /rss/all, or subscribe to specific categories like /rss/ai or /rss/web-dev.",
-  },
-  {
-    q: "How are the Trending articles selected?",
-    a: "Our trending algorithm is based on a mix of recent engagement (likes, comments, read time) and recency. We heavily weight deep reading over superficial clicks to ensure high-quality content surfaces to the top.",
-  },
-  {
-    q: "Can I leave comments on articles?",
-    a: "Yes — comments are available to all registered users. We have a community moderation system and a code of conduct to keep discussions technical, respectful, and on-topic.",
-  },
-  {
-    q: "Do you offer API access?",
-    a: "Yes, Pro subscribers get access to our read-only GraphQL API. It allows you to programmatically fetch articles, search our archives, and integrate TechPulse content into your internal team dashboards.",
-  },
-  {
-    q: "How do I cancel my Pro subscription?",
-    a: "You can cancel anytime from your account settings under Billing. Your Pro access remains active until the end of the current billing period. No questions asked.",
-  },
-];
+import { faqs } from "@/lib/db";
+import { NavbarWrapper } from "@/components/NavWrapper";
 
 export default function FaqPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-[#FF6B6B]/30 pb-24">
-      <Navbar showSearch={false} showActions activeLink="faq" />
+      <NavbarWrapper showSearch={false} showActions activeLink="faq" />
 
       <main className="container mx-auto px-4 pt-16 md:pt-20 max-w-3xl">
         <div className="text-center mb-16">
@@ -88,5 +53,3 @@ export default function FaqPage() {
     </div>
   );
 }
-
-

@@ -1,21 +1,19 @@
 import { redirect } from "next/navigation";
-import BookmarksSection from "../bookmarks.tsx/page";
 import { formatDate } from "@/lib/utils";
-import { Navbar } from "@/components/NavBar";
 import { getUser } from "@/lib/auth";
 import { BookOpen, Bookmark, MessageSquare, Clock } from "lucide-react";
 import { getDashboardData } from "../../lib/queries";
+import { NavbarWrapper } from "@/components/NavWrapper";
+import Bookmarks from "@/components/Bookmarks";
 
 export default async function DashboardPage() {
   const user = await getUser();
   if (!user) redirect("/login");
 
   const { bookmarks, commentCount, history } = await getDashboardData(user.id);
-
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
-      <Navbar user={user} showActions />
-
+      <NavbarWrapper user={user} showActions />
       <main className="container mx-auto px-4 py-10 max-w-5xl">
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
@@ -27,7 +25,6 @@ export default async function DashboardPage() {
           </p>
         </header>
 
-        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           {[
             {
@@ -67,8 +64,13 @@ export default async function DashboardPage() {
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <Bookmark className="w-5 h-5 text-[#FF6B6B]" /> Bookmarks
               </h2>
+              {/* {bookmarks.length > 5 && (
+                <a href="/bookmarks" className="text-sm text-white">
+                  View all
+                </a>
+              )} */}
             </div>
-            <BookmarksSection bookmarks={bookmarks} />
+            <Bookmarks bookmarks={bookmarks} />
           </div>
 
           <div>

@@ -29,7 +29,7 @@ export default async function TrendingFeed() {
             className="flex gap-3 items-start p-3 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10 transition-colors group"
           >
             <span className="text-xl font-bold text-white/20 italic w-5 shrink-0 leading-tight">
-              {index}
+              {index + 1}
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-sm text-white/80 group-hover:text-white transition-colors leading-snug line-clamp-2">

@@ -21,20 +21,26 @@ export default function AuthPage() {
       setError("Please fill in all fields");
       return;
     }
-
     setLoading(true);
     setError(null);
-
     const result = isSignUp
       ? await signUp(email, password, name)
       : await signIn(email, password);
-
+    toast.success(
+      isSignUp
+        ? "Account created! Welcome to TechPulse 🎉"
+        : "Welcome back! 👋",
+      { duration: 5000 },
+    );
     toast.success(
       isSignUp
         ? "Account created! Welcome to TechPulse 🎉"
         : "Welcome back! 👋",
     );
-    router.push("/feed");
+
+    setTimeout(() => {
+      router.push("/feed");
+    }, 1500);
     if (result?.error) {
       toast.error(result.error);
       setLoading(false);
